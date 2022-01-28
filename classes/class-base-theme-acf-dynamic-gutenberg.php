@@ -8,13 +8,13 @@
 */
 
 if ( !defined( 'JS_PATH' ) ) {
-    define("JS_PATH", get_template_directory_uri().'/assets/js/acf-blocks-js' );
+    define( 'JS_PATH', get_template_directory().'/assets/js/acf-blocks-js' );
 }
 if ( !defined( 'CSS_PATH' ) ) {
-    define("CSS_PATH", get_template_directory_uri().'/assets/css/acf-blocks-css' );
+    define( 'CSS_PATH', get_template_directory().'/assets/scss/acf-blocks-scss' );
 }
 if ( !defined( 'THEME_PATH' ) ) {
-    define("THEME_PATH", get_template_directory().'/' );
+    define( 'THEME_PATH', get_template_directory().'/' );
 }
 
 if ( ! class_exists( 'Base_Theme_ACF_Gutenberg_Functions' ) ) {
@@ -50,7 +50,7 @@ if ( ! class_exists( 'Base_Theme_ACF_Gutenberg_Functions' ) ) {
                 array(
                     array(
                         'slug'  => 'acf-blocks',
-                        'title' => __( 'THEME NAME BLOCKS' ),
+                        'title' => __( 'Base Theme BLOCKS' ),
                         'icon'  => '',
                     ),
                 )
@@ -80,7 +80,7 @@ if ( ! class_exists( 'Base_Theme_ACF_Gutenberg_Functions' ) ) {
                                 'align'           => ! empty( $field_group['block_align'] ) ? $field_group['block_align'] : '',
                                 'keywords'        => explode( ' ', $field_group['block_keywords'] ),
                                 'post_types'      => $field_group['block_post_types'] ? $field_group['block_post_types'] : [],
-                                'enqueue_assets'	=> array($this,'base_theme_render_dynamic_acf_block_enqueue'),
+                                // 'enqueue_assets'	=> array($this,'base_theme_render_dynamic_acf_block_enqueue'),
                                 'mode'            => ! empty( $field_group['block_mode'] ) ? $field_group['block_mode'] : 'preview',
                                 'supports'        => [
                                     'align'            => ! empty( $field_group['block_alignments'] ) ? $field_group['block_alignments'] : false,
@@ -102,14 +102,14 @@ if ( ! class_exists( 'Base_Theme_ACF_Gutenberg_Functions' ) ) {
          * @param array $block the block being parsed.
          * @return void
         */
-        public function base_theme_render_dynamic_acf_block_enqueue( $block ){
-            // Convert name ("acf/block_name") into path friendly slug.
-            $slug  = str_replace( 'acf/', '', $block['name'] );
-            $block_js_path = $slug.'.js';
-            $block_css_path = $slug.'.css';
-            wp_enqueue_script( $slug.'-js' , JS_PATH.'/'.$block_js_path, array('jquery'), '', true );
-            wp_enqueue_style( $slug.'-css', CSS_PATH.'/'.$block_css_path );			
-        }
+        // public function base_theme_render_dynamic_acf_block_enqueue( $block ){
+        //     // Convert name ("acf/block_name") into path friendly slug.
+        //     $slug  = str_replace( 'acf/', '', $block['name'] );
+        //     $block_js_path = $slug.'.js';
+        //     $block_css_path = $slug.'.css';
+        //     wp_enqueue_script( $slug.'-js' , JS_PATH.'/'.$block_js_path, array('jquery'), '', true );
+        //     wp_enqueue_style( $slug.'-css', CSS_PATH.'/'.$block_css_path );			
+        // }
 
         /**
          * Global render helper to parse to the proper template partial for each block type
@@ -128,19 +128,19 @@ if ( ! class_exists( 'Base_Theme_ACF_Gutenberg_Functions' ) ) {
             
             
             // Allow partial's location to be filtered.
-            $template_root_css  = THEME_PATH.'assets/scss/acf-blocks-scss';
+            $template_root_css  = THEME_PATH.'assets/scss/acf-block-scss';
             $block_template_css = "{$template_root_css}/{$slug}.scss";
             
             // Allow partial's location to be filtered.
-            $template_root_js  = THEME_PATH.'assets/js/acf-blocks-js';
-            $block_template_js = "{$template_root_js}/{$slug}.js";
+            // $template_root_js  = THEME_PATH.'assets/js/acf-blocks-js';
+            // $block_template_js = "{$template_root_js}/{$slug}.js";
             
             // Attempt to include a template part from within the defined templates folder.
             if ( file_exists( $block_template ) ) {
                 include $block_template;
             } else {
                 // Template not found, add recomendation.
-                $block_file = fopen( $block_template, "w") or die("Unable to open file!");
+                $block_file = fopen( $block_template, 'w' ) or die( 'Unable to open file!' );
                 $txt = '<section id="'.$slug.'">Add HTML code Here</section>';
                 fwrite($block_file, $txt);
                 fclose($block_file);
@@ -151,48 +151,48 @@ if ( ! class_exists( 'Base_Theme_ACF_Gutenberg_Functions' ) ) {
             if ( !file_exists( $block_template_css ) ) {
                     
                 // Template not found, add recomendation.
-                $block_file_css = fopen( $block_template_css, "w") or die("Unable to open file!");
+                $block_file_css = fopen( $block_template_css, 'w' ) or die( 'Unable to open file!' );
                 $txt = '/* Add Block CSS Here */';
                 fwrite($block_file_css, $txt);
                 fclose($block_file_css);
                 //error_log( "[WARNING] Create {$block_template} to complete registration for the \"{$title}\" acf block." );
             }
             
-            // Attempt to include a template part from within the defined templates folder.
-            if ( !file_exists( $block_template_js ) ) {
+            // // Attempt to include a template part from within the defined templates folder.
+            // if ( !file_exists( $block_template_js ) ) {
                 
-                // Template not found, add recomendation.
-                $block_file_js = fopen( $block_template_js, "w") or die("Unable to open file!");
-                $txt = '/* Add Block JS Here */
-                        (function($){
-                            /**
-                             * initializeBlock
-                             *
-                             * Adds custom JavaScript to the block HTML.
-                             *
-                             * @since   1.0.0
-                             *
-                             * @param   object $block The block jQuery element.
-                             * @param   object attributes The block attributes (only available when editing).
-                             * @return  void
-                             */
-                            var initializeBlock = function( ) {
-                                // Add your code here
-                            }
-                            // Initialize each block on page load (front end).
-                            $(document).ready(function(){
-                                initializeBlock(); 
-                            });
+            //     // Template not found, add recomendation.
+            //     $block_file_js = fopen( $block_template_js, "w") or die("Unable to open file!");
+            //     $txt = '/* Add Block JS Here */
+            //             (function($){
+            //                 /**
+            //                  * initializeBlock
+            //                  *
+            //                  * Adds custom JavaScript to the block HTML.
+            //                  *
+            //                  * @since   1.0.0
+            //                  *
+            //                  * @param   object $block The block jQuery element.
+            //                  * @param   object attributes The block attributes (only available when editing).
+            //                  * @return  void
+            //                  */
+            //                 var initializeBlock = function( ) {
+            //                     // Add your code here
+            //                 }
+            //                 // Initialize each block on page load (front end).
+            //                 $(document).ready(function(){
+            //                     initializeBlock(); 
+            //                 });
                         
-                            // Initialize dynamic block preview (editor).
-                            if( window.acf ) {
-                                window.acf.addAction( "render_block_preview/type=add_block_slug_here", initializeBlock );        
-                            }
-                        })(jQuery);';
-                fwrite($block_file_js, $txt);
-                fclose($block_file_js);
-                //error_log( "[WARNING] Create {$block_template} to complete registration for the \"{$title}\" acf block." );
-            }
+            //                 // Initialize dynamic block preview (editor).
+            //                 if( window.acf ) {
+            //                     window.acf.addAction( "render_block_preview/type=add_block_slug_here", initializeBlock );        
+            //                 }
+            //             })(jQuery);';
+            //     fwrite($block_file_js, $txt);
+            //     fclose($block_file_js);
+            //     //error_log( "[WARNING] Create {$block_template} to complete registration for the \"{$title}\" acf block." );
+            // }
         }
 
 

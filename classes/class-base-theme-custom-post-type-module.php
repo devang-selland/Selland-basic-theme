@@ -19,7 +19,7 @@ if ( ! class_exists( 'Base_Theme_ACF_Custom_Post_Type_Module' ) ) {
             add_action( 'init',array( $this,'base_theme_add_taxonomy') );		
         }
 
-        public function base_theme_get_post_types() {
+        public function base_theme_custom_get_post_types() {
             $custom_post_types_arr = array();
         
             // $custom_post_types_arr[] = array(

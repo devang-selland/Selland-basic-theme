@@ -19,21 +19,22 @@ if ( ! defined( '_S_VERSION' ) ) {
 $includes_files = array(
     'template-tags.php',
 	'customizer.php',
-    'base-theme-functions.php',
 );
 
 foreach($includes_files as $filename){
-    require_once 'includes/' . $filename ;
+    require_once 'inc/' . $filename ;
 }
 
 /*
  * Add required Class files.
  */
 $class_files = array(
-	'class-base-theme-acf-eneque.php',	
+	'class-base-theme-eneque.php',	
 	'class-base-theme-custom-post-type-module.php',
 	'class-base-theme-acf-theme-option.php',
 	'class-base-theme-acf-dynamic-gutenberg.php',
+	'class-base-theme-acf-theme-functions.php',
+	'class-base-theme-acf-missing.php',
 );
 foreach($class_files as $class_file){
     require_once 'classes/' . $class_file ;

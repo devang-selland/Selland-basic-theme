@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Page without Banner Layout
+ * Template Name: Page Flexible Content Layout 
  * Template Type: ACF Flexible Content Layout
  *
  * @package WordPress

@@ -74,9 +74,7 @@ if ( ! class_exists( 'Base_Theme_Eneque' ) ) {
             // Enqueue block editor styles
             wp_enqueue_style(
                 'base-theme-editor-css',
-                get_template_directory_uri().$blockPath,
-                [ 'wp-blocks', 'wp-element', 'wp-i18n' ],
-                filemtime( get_template_directory_uri().$blockPath )	
+                get_theme_file_uri( $blockPath ),
             );
 
         }
